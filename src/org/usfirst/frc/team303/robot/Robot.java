@@ -1,7 +1,10 @@
 
 package org.usfirst.frc.team303.robot;
 
+import com.ni.vision.VisionException;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -19,7 +22,8 @@ public class Robot extends IterativeRobot {
     SendableChooser chooser;
     static VictorSixDrivebase drivebase;
     static Pneumatics piston;
-    static OI oi;
+    static IPCam camera;
+    static Timer timer  = new Timer();
     
     /**
      * This function is run when the robot is first started up and should be
@@ -29,11 +33,14 @@ public class Robot extends IterativeRobot {
         chooser = new SendableChooser();
         chooser.addDefault("Default Auto", defaultAuto);
         chooser.addObject("My Auto", customAuto);
-        SmartDashboard.putData("Auto choices", chooser);
+        SmartDashboard.putData("Auto chOIces", chooser);
         
-        drivebase = new VictorSixDrivebase();
-        oi = new OI();
-        piston = new Pneumatics();
+       // drivebase = new VictorSixDrivebase();
+       // piston = new Pneumatics();
+        timer.reset();
+        timer.start();
+        
+        camera = new IPCam();
     }
     
 	/**
@@ -70,16 +77,18 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-    	oi.update();
-    	drivebase.drive(oi.lStickY, oi.rStickY);
-    	piston.setPiston(oi.lStickBtn1);
+    	OI.update();
+    	runCamera();
+    	//drivebase.drive(OI.lStickY, OI.rStickY);
+    	//piston.setPiston(OI.lStickBtn1);
     	
-    	SmartDashboard.putNumber("lStick", oi.lStickY);
-    	SmartDashboard.putNumber("rStick", oi.rStickY);
-    	SmartDashboard.putBoolean("lStickBtn1", oi.lStickBtn1);
+    	//SmartDashboard.putNumber("lStick", OI.lStickY);
+    	//SmartDashboard.putNumber("rStick", OI.rStickY);
     	
-    	SmartDashboard.putNumber("pwm value 1", drivebase.F1.get());
-    	SmartDashboard.putNumber("pwm value 2", drivebase.F2.get());
+    	//SmartDashboard.putNumber("pwm value 1", drivebase.F1.get());
+    	//SmartDashboard.putNumber("pwm value 2", drivebase.F2.get());
+    	
+   
     }
     
     /**
@@ -87,6 +96,18 @@ public class Robot extends IterativeRobot {
      */
     public void testPeriodic() {
     
+    }
+    
+    public void disabledPeriodic() {
+    	SmartDashboard.putNumber("time", timer.get());
+    	runCamera();
+    }
+    
+    public void runCamera() {
+    	try {
+			camera.runCameraServer();
+		} catch (VisionException e) {}
+    	
     }
     
 }

@@ -3,23 +3,22 @@ package org.usfirst.frc.team303.robot;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class OI {
-	Joystick lStick;
-	Joystick rStick;
-	boolean lStickBtn1;
-	boolean lStickBtn2;
-	boolean lStickBtn3;
-	boolean lStickBtn4;
-	boolean lStickBtn5;
-	double lStickY;
-	double lStickX;
-	double rStickY;
+	static Joystick lStick = new Joystick(RobotMap.LSTICK_PORT);
+	static Joystick rStick = new Joystick(RobotMap.RSTICK_PORT);
+	static boolean lStickBtn1;
+	static boolean lStickBtn2;
+	static boolean lStickBtn3;
+	static boolean lStickBtn4;
+	static boolean lStickBtn5;
+	static double lStickY;
+	static double lStickX;
+	static double rStickY;
 	
 	public OI() {
-		lStick = new Joystick(RobotMap.LSTICK_PORT);
-		rStick = new Joystick(RobotMap.RSTICK_PORT);
+		//DON'T PUT THINGS HERE IT WILL CRASH OH MY GOD PLEASE DON'T DO IT
 	}
 	
-	public void update() {
+	public static void update() {
 		lStickBtn1 = lStick.getRawButton(1);
 		lStickBtn2 = lStick.getRawButton(2);
 		lStickBtn3 = lStick.getRawButton(3);
