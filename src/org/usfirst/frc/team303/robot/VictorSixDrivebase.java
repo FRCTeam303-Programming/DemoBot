@@ -1,7 +1,12 @@
 package org.usfirst.frc.team303.robot;
 
 import edu.wpi.first.wpilibj.VictorSP;
-import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.I2C;
 
 public class VictorSixDrivebase {
 	VictorSP FL;
@@ -10,6 +15,12 @@ public class VictorSixDrivebase {
 	VictorSP BR;
 	VictorSP F1;
 	VictorSP F2;
+	Encoder lDriveEnc;
+	Encoder rDriveEnc;
+	AHRS navX;
+	double navXYaw;
+	double lDriveEncDist;
+	double rDriveEncDist;
 
 	public VictorSixDrivebase() {
 		FL = new VictorSP(RobotMap.FLM);
@@ -39,6 +50,9 @@ public class VictorSixDrivebase {
 		BL.enableDeadbandElimination(true);
 		F1.enableDeadbandElimination(true);
 		F2.enableDeadbandElimination(true);
+		lDriveEnc = new Encoder(0, 1);
+		rDriveEnc = new Encoder(2, 3);
+		navX = new AHRS(I2C.Port.kMXP);
 	}
 
 	public void drive(double left, double right) {
@@ -49,5 +63,15 @@ public class VictorSixDrivebase {
 		FR.set(right);
 		BR.set(right);
 		F2.set(right);
+	}
+	public void updateSensors() {
+		navXYaw = navX.getYaw();
+		lDriveEncDist = lDriveEnc.getDistance();
+		rDriveEncDist = rDriveEnc.getDistance();
+		
+		SmartDashboard.putNumber("NavXYaw", navXYaw);
+		SmartDashboard.putNumber("lDriveEncDist", lDriveEncDist);
+		SmartDashboard.putNumber("rDriveEncDist", rDriveEncDist);
+		
 	}
 }

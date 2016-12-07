@@ -24,7 +24,7 @@ public class Robot extends IterativeRobot {
     static Pneumatics piston;
     static IPCam camera;
     static Timer timer  = new Timer();
-    
+    Vision v;
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -39,7 +39,7 @@ public class Robot extends IterativeRobot {
        // piston = new Pneumatics();
         timer.reset();
         timer.start();
-        
+        v= new Vision();
         camera = new IPCam();
     }
     
@@ -78,7 +78,16 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
     	OI.update();
+    	drivebase.updateSensors();
     	runCamera();
+    	if(OI.lStickBtn1){
+    		v.run(camera.getCenterX(),camera.getCenterY());
+    	}
+    	else{
+    		v.reset();
+    		drivebase.drive(OI.lStickY, OI.rStickY);
+    	}
+    	
     	//drivebase.drive(OI.lStickY, OI.rStickY);
     	//piston.setPiston(OI.lStickBtn1);
     	
@@ -109,5 +118,5 @@ public class Robot extends IterativeRobot {
 		} catch (VisionException e) {}
     	
     }
-    
+  
 }
