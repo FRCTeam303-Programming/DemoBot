@@ -44,12 +44,12 @@ public class VictorSixDrivebase {
 		F1.setInverted(RobotMap.F1_INV);
 		F2.setInverted(RobotMap.F2_INV);
 		
-		FL.enableDeadbandElimination(true);
-		FR.enableDeadbandElimination(true);
-		BR.enableDeadbandElimination(true);
-		BL.enableDeadbandElimination(true);
-		F1.enableDeadbandElimination(true);
-		F2.enableDeadbandElimination(true);
+		FL.enableDeadbandElimination(false);
+		FR.enableDeadbandElimination(false);
+		BR.enableDeadbandElimination(false);
+		BL.enableDeadbandElimination(false);
+		F1.enableDeadbandElimination(false);
+		F2.enableDeadbandElimination(false);
 		lDriveEnc = new Encoder(0, 1);
 		rDriveEnc = new Encoder(2, 3);
 		navX = new AHRS(I2C.Port.kMXP);

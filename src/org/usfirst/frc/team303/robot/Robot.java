@@ -35,8 +35,8 @@ public class Robot extends IterativeRobot {
         chooser.addObject("My Auto", customAuto);
         SmartDashboard.putData("Auto chOIces", chooser);
         
-       // drivebase = new VictorSixDrivebase();
-       // piston = new Pneumatics();
+        drivebase = new VictorSixDrivebase();
+        piston = new Pneumatics();
         timer.reset();
         timer.start();
         v= new Vision();
@@ -78,16 +78,19 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
     	OI.update();
-    	drivebase.updateSensors();
     	runCamera();
     	if(OI.lStickBtn1){
     		v.run(camera.getCenterX(),camera.getCenterY());
+    		SmartDashboard.putString("goalx", ""+camera.getCenterX());
+    		SmartDashboard.putString("goaly", ""+camera.getCenterY());
     	}
     	else{
     		v.reset();
-    		drivebase.drive(OI.lStickY, OI.rStickY);
+    		drivebase.drive(OI.lStickY,- OI.rStickY);
     	}
-    	
+    	SmartDashboard.putString("stickbtn 1", ""+OI.lStickBtn1);
+    	SmartDashboard.putString("l drive", ""+OI.lStickY);
+    	SmartDashboard.putString("r drive", ""+OI.rStickY);
     	//drivebase.drive(OI.lStickY, OI.rStickY);
     	//piston.setPiston(OI.lStickBtn1);
     	

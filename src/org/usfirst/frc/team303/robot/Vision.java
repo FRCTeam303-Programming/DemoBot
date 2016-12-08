@@ -26,17 +26,18 @@ public class Vision {
     public boolean run(double centerX,double centerY){
     	if(firstRun){
     		angleSetpoint=((centerX-IDEAL_center_X)*PIXELS_TO_DEGREES)+Robot.drivebase.navX.getYaw();
-    		encoderSetpoint=((centerY-IDEAL_center_Y)*PIXELS_TO_ENCODERS)+(Robot.drivebase.lDriveEnc.getDistance()+Robot.drivebase.lDriveEnc.getDistance())/2;
-    	}
-    	if(Math.abs((Robot.drivebase.lDriveEnc.getDistance()+Robot.drivebase.lDriveEnc.getDistance())/2-encoderSetpoint)>40){
-    		if(encoderSetpoint-((Robot.drivebase.lDriveEnc.getDistance()+Robot.drivebase.lDriveEnc.getDistance())/2)>0)
+    		encoderSetpoint=((centerY-IDEAL_center_Y)*PIXELS_TO_ENCODERS)+(Robot.drivebase.lDriveEnc.getDistance()+Robot.drivebase.rDriveEnc.getDistance())/2;
+    	}else{}
+    	
+    	if(Math.abs((Robot.drivebase.lDriveEnc.getDistance()+Robot.drivebase.rDriveEnc.getDistance())/2-encoderSetpoint)>40){
+    		if(encoderSetpoint-((Robot.drivebase.lDriveEnc.getDistance()+Robot.drivebase.rDriveEnc.getDistance())/2)>0)
     			Robot.drivebase.drive(-PowerX,PowerX);
     		else
     			Robot.drivebase.drive(PowerX,-PowerX);
     		return false;
     	
     	}
-    	else if (Math.abs((Robot.drivebase.lDriveEnc.getDistance()+Robot.drivebase.lDriveEnc.getDistance())/2-encoderSetpoint)>10){
+    	else if (Math.abs((Robot.drivebase.lDriveEnc.getDistance()+Robot.drivebase.lDriveEnc.getDistance())/2-encoderSetpoint)<40){
     		double encoderError=encoderSetpoint-((Robot.drivebase.lDriveEnc.getDistance()+Robot.drivebase.lDriveEnc.getDistance())/2);
     		double p=encoderError*KpY;
     		double i=errorSumY*KiY;
@@ -50,14 +51,14 @@ public class Vision {
     		double power =p+i+d;
     		previousErrorY=encoderError;
     		errorSumY=encoderError;
-    		Robot.drivebase.drive(power, power);
+    		Robot.drivebase.drive(-power, power);
     		return false;
     	}
     	else if(Math.abs(angleSetpoint-Robot.drivebase.navX.getYaw())>=8){
     		if(angleSetpoint-Robot.drivebase.navX.getYaw()>0)
-    			Robot.drivebase.drive(-PowerX,PowerX);
+    			Robot.drivebase.drive(PowerX,PowerX);
     		else
-    			Robot.drivebase.drive(PowerX,-PowerX);
+    			Robot.drivebase.drive(-PowerX,-PowerX);
     		return false;
     	}
     	else if(angleSetpoint-Robot.drivebase.navX.getYaw()>2){
@@ -74,7 +75,7 @@ public class Vision {
     		double power =p+i+d;
     		previousErrorX=angleError;
     		errorSumX+=angleError;
-    		Robot.drivebase.drive(-power, power);
+    		Robot.drivebase.drive(power, power);
     		return false;
     	}
     	else if(Math.abs(centerX-IDEAL_center_X)>2&&Math.abs(centerY-IDEAL_center_Y)>2){
