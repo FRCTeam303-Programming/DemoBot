@@ -1,5 +1,7 @@
 package org.usfirst.frc.team303.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Vision {
 	
 	double KpX=.05;
@@ -9,11 +11,11 @@ public class Vision {
 	double KiY=0;
 	double KdY=0;
 	double PowerX=.5;
-	double PowerY=.5;
+	double PowerY=.15;
 	final static double IDEAL_center_X=100;
     final static double IDEAL_center_Y=100;
     final static double PIXELS_TO_DEGREES=.14875;
-    final static double PIXELS_TO_ENCODERS=10;
+    final static double PIXELS_TO_ENCODERS=1;
     double errorSumX=0;
     double errorSumY=0;
     double previousErrorX;
@@ -27,17 +29,24 @@ public class Vision {
     	if(firstRun){
     		angleSetpoint=((centerX-IDEAL_center_X)*PIXELS_TO_DEGREES)+Robot.drivebase.navX.getYaw();
     		encoderSetpoint=((centerY-IDEAL_center_Y)*PIXELS_TO_ENCODERS)+(Robot.drivebase.lDriveEnc.getDistance()+Robot.drivebase.rDriveEnc.getDistance())/2;
+    		firstRun=false;
     	}else{}
-    	
+    	SmartDashboard.putString("Encoder setpoint",""+centerY);	
+    	SmartDashboard.putString("Encoder setpoint",""+encoderSetpoint);
+		SmartDashboard.putString("angle setpoint",""+angleSetpoint);
+		SmartDashboard.putString("Encoder error",""+""+(encoderSetpoint-(Robot.drivebase.lDriveEnc.getDistance()+Robot.drivebase.rDriveEnc.getDistance())/2));
     	if(Math.abs((Robot.drivebase.lDriveEnc.getDistance()+Robot.drivebase.rDriveEnc.getDistance())/2-encoderSetpoint)>40){
-    		if(encoderSetpoint-((Robot.drivebase.lDriveEnc.getDistance()+Robot.drivebase.rDriveEnc.getDistance())/2)>0)
-    			Robot.drivebase.drive(-PowerX,PowerX);
-    		else
-    			Robot.drivebase.drive(PowerX,-PowerX);
+    		if(encoderSetpoint-((Robot.drivebase.lDriveEnc.getDistance()+Robot.drivebase.rDriveEnc.getDistance())/2)>0){
+    			Robot.drivebase.drive(-PowerY,PowerY);
+    		}
+    		else{
+    			Robot.drivebase.drive(PowerY,-PowerY);
+    		}
+    	
     		return false;
     	
     	}
-    	else if (Math.abs((Robot.drivebase.lDriveEnc.getDistance()+Robot.drivebase.lDriveEnc.getDistance())/2-encoderSetpoint)<40){
+    	else if (Math.abs((Robot.drivebase.lDriveEnc.getDistance()+Robot.drivebase.lDriveEnc.getDistance())/2-encoderSetpoint)>10){
     		double encoderError=encoderSetpoint-((Robot.drivebase.lDriveEnc.getDistance()+Robot.drivebase.lDriveEnc.getDistance())/2);
     		double p=encoderError*KpY;
     		double i=errorSumY*KiY;
@@ -86,12 +95,11 @@ public class Vision {
     		return false;
     	}
     	
-  
     
     }
     
    public void reset(){
-	   firstRun=false;
+	   firstRun=true;
 	   firstPIDX=firstPIDY=false;
 	   errorSumX=errorSumY=0;
    }
