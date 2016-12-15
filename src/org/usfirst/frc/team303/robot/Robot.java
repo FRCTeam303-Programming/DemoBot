@@ -77,12 +77,14 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
+    	
     	OI.update();
     	runCamera();
     	if(OI.lStickBtn1){
-    		v.run(camera.getCenterX(),camera.getCenterY());
-    		SmartDashboard.putString("goalx", ""+camera.getCenterX());
-    		SmartDashboard.putString("goaly", ""+camera.getCenterY());
+    		double[] goal=camera.getGoal();
+    		v.run(goal[0],goal[1]);
+    		SmartDashboard.putString("goal x",""+goal[0]);
+    		SmartDashboard.putString("goal y",""+goal[1]);
     	}
     	else{
     		v.reset();

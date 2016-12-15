@@ -1,6 +1,6 @@
 package org.usfirst.frc.team303.robot;
+
 import edu.wpi.first.wpilibj.vision.AxisCamera;
-import java.awt.image.*;
 import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.DrawMode;
 import com.ni.vision.NIVision.Image;
@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.imgproc.Imgproc;
 
 import java.io.IOException;
 
@@ -31,6 +32,7 @@ public class IPCam {
 	RIPGRIP2 grip= new RIPGRIP2();
 	Mat m= new Mat();
 	VideoCapture vcap = new VideoCapture();
+	
 	public IPCam() {
 		
 		vcap.open("http://10.17.47.16/mjpg/video.mjpg");
@@ -53,14 +55,9 @@ public class IPCam {
 		grip.setsource0(m);
 	}
 	
-	public double getCenterX() {
-		return globalCenterX;
+	public double[] getGoal() {
+		return grip.process();
 	}
-	
-	public double getCenterY() {
-		return globalCenterY;
-	}
-	
 	
 	
 }

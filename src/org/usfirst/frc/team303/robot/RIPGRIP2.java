@@ -38,6 +38,7 @@ public class RIPGRIP2 {
 	private Mat source0;
 	static{
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		//System.loadLibrary("opencv-310");
 	}
 
 	/**
@@ -49,7 +50,7 @@ public class RIPGRIP2 {
 	/**
 	 * This is the primary method that runs the entire pipeline and updates the outputs.
 	 */
-	public void process() {
+	public double[] process() {
 		//Step  CV_resize0:
 		Mat cvResizeSrc = source0;
 		Size cvResizeDsize = new Size(0, 0);
@@ -93,7 +94,18 @@ public class RIPGRIP2 {
 		double filterContoursMinRatio = 0.5;
 		double filterContoursMaxRatio = 2.0;
 		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
-
+		
+		if(filterContoursOutput.size()!=1){
+			double[] blank={0,0};
+			return blank;
+		}
+		
+		final MatOfPoint goal= filterContoursOutput.get(0);
+		Rect rec = Imgproc.boundingRect(goal);
+		double y = rec.br().y + rec.height / 2.0;
+		double x = rec.br().x + rec.width / 2.0;
+		double[] d = {x,y};
+		return d;//the d
 	}
 
 	/**
@@ -272,9 +284,5 @@ public class RIPGRIP2 {
 			output.add(contour);
 		}
 	}
-
-
-
-
 }
 
