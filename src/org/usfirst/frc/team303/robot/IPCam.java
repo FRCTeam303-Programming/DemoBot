@@ -29,13 +29,13 @@ public class IPCam {
 	NetworkTable table;
 	double[] defaultValue = new double[0];
 	NIVision.Rect rect;
-	RIPGRIP2 grip= new RIPGRIP2();
+	Grip grip= new Grip();
 	Mat m= new Mat();
 	VideoCapture vcap = new VideoCapture();
 	
 	public IPCam() {
 		
-		vcap.open("http://10.17.47.16/mjpg/video.mjpg");
+		vcap.open("http://10.3.3.5/mjpg/video.mjpg");
 		cam = new AxisCamera("10.3.3.5");
 		frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		//overlay = new NIVision.Rect()
@@ -48,7 +48,6 @@ public class IPCam {
 	
 	public void runCameraServer() {
 		cam.getImage(frame);
-		
 		NIVision.imaqDrawShapeOnImage(frame, frame, rect, DrawMode.DRAW_VALUE, ShapeMode.SHAPE_OVAL, 0.0f);
 		CameraServer.getInstance().setImage(frame);
 		vcap.read(m);

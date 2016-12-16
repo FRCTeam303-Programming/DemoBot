@@ -25,7 +25,7 @@ import org.opencv.imgproc.*;
 *
 * @author GRIP
 */
-public class RIPGRIP2 {
+public class Grip {
 
 	//Outputs
 	private Mat cvResizeOutput = new Mat();
@@ -44,7 +44,7 @@ public class RIPGRIP2 {
 	/**
 	 * This constructor sets up the pipeline
 	 */
-	public RIPGRIP2() {
+	public Grip() {
 	}
 
 	/**
